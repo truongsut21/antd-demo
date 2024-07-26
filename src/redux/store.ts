@@ -1,13 +1,11 @@
 // src/store.ts
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice'
-import postReducer from '../features/Post/postSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import forgotPasswordReducer from "./forgotPasswordSlice";
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
-    posts: postReducer,
-  }
+    forgotPassword: forgotPasswordReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

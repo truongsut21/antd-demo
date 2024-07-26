@@ -2,9 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface payload {
-  email?: string;
-  password?: string;
-  code?: string
+  email: string;
+  password: string;
+  code: string
 }
 
 export const fetchResetPassword = createAsyncThunk(

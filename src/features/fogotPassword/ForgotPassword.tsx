@@ -8,7 +8,7 @@ import { setEmail } from "../../redux/forgotPasswordSlice";
 import { useNavigate } from "react-router-dom";
 
 type FieldType = {
-  email?: string;
+  email: string;
 };
 
 const ForgotPassword: React.FC = () => {

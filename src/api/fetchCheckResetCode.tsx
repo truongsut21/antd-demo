@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface Payload {
-  email?: string;
+  email: string;
   code: string;
 }
 // Định nghĩa interface cho response

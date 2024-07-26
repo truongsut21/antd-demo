@@ -7,8 +7,8 @@ import { fetchResetPassword } from "../../api/fetchResetPassword";
 import { Navigate, useNavigate } from "react-router-dom";
 
 type FieldType = {
-  password?: string;
-  confirm?: string;
+  password: string;
+  confirm: string;
 };
 
 const CreatePassword: React.FC = () => {

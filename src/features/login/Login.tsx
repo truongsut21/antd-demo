@@ -8,8 +8,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
 const Login: React.FC = () => {
@@ -17,44 +17,28 @@ const Login: React.FC = () => {
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     console.log("Success:", values);
-    dispatch(FetchLogin(values));
 
     const requestAPI = dispatch(FetchLogin(values));
     try {
       requestAPI.then((response) => {
-        console.log("response:", response);
+        if (response.payload.access_token) {
+          localStorage.setItem("token", response.payload.access_token);
+          // set token mặc định
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `${response.payload.access_token}`;
 
-        if (response.payload) {
-          if (response.payload.access_token) {
-            localStorage.setItem("token", response.payload.access_token);
-            // set token mặc định
-            axios.defaults.headers.common[
-              "Authorization"
-            ] = `${response.payload.access_token}`;
-
-            window.location.href = "/dash-board";
-          } else {
-            notification.error({
-              message: "Error",
-              description: response.payload.message,
-            });
-          }
+          window.location.href = "/dash-board";
         } else {
           notification.error({
             message: "Error",
-            description: "Đăng nhập thất bại",
+            description: response.payload.message,
           });
         }
       });
-    } catch (error) {}
-
-    
-  };
-
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo
-  ) => {
-    console.log("Failed:", errorInfo);
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
@@ -66,14 +50,19 @@ const Login: React.FC = () => {
         style={{ maxWidth: 600 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
         className="m-auto mt-10"
       >
         <Form.Item<FieldType>
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+          rules={[
+            {
+              type: "email",
+              message: "Nhập đúng định dạng E-mail!",
+            },
+            { required: true, message: "Vui lòng nhập email!" },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -92,7 +81,6 @@ const Login: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-
 
       <Link to="/forgot-password" className="text-blue-600">
         Quên mật khẩu.

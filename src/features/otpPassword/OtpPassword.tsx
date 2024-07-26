@@ -56,10 +56,12 @@ const OtpPassword: React.FC = () => {
   };
 
   return (
-    <Flex gap="middle" align="flex-start" vertical className="m-5">
-      <Title level={5}>OTP Password</Title>
-      <Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />
-    </Flex>
+    <div className="flex">
+      <Flex gap="middle" align="flex-start" vertical className="m-auto mt-10">
+        <Title level={5}>OTP Password</Title>
+        <Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />
+      </Flex>
+    </div>
   );
 };
 

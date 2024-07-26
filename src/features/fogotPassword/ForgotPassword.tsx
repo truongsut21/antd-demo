@@ -49,34 +49,47 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <>
-      <p>Quên mật khẩu</p>
-
-      <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
-        <Form.Item<FieldType>
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+    <div className="flex">
+      <div className="m-auto flex flex-col w-1/3 mt-10">
+        <p>Quên mật khẩu</p>
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
         >
-          <Input />
-        </Form.Item>
+          <Form.Item<FieldType>
+            label="Email"
+            name="email"
+            rules={[
+              {
+                type: "email",
+                message: "Nhập đúng định dạng E-mail!",
+              },
+              { required: true, message: "Vui lòng nhập email!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Gửi mã xác nhạn
-          </Button>
-        </Form.Item>
-      </Form>
-    </>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button
+              type="primary"
+              className="mx-5"
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              Về trang chủ
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Gửi mã xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
   );
 };
 

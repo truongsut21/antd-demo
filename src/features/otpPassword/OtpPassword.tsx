@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, Input, Typography, notification } from "antd";
 import type { GetProps } from "antd";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,12 @@ const OtpPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const email = useSelector((state: RootState) => state.forgotPassword.email);
+
+  useEffect(() => {
+    if (!email) {
+      navigate("/login");
+    }
+  });
 
   const onChange: OTPProps["onChange"] = async (code) => {
     console.log("onChange:", code);

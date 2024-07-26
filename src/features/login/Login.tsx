@@ -47,6 +47,8 @@ const Login: React.FC = () => {
         }
       });
     } catch (error) {}
+
+    
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col items-center">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -84,16 +86,17 @@ const Login: React.FC = () => {
           <Input.Password />
         </Form.Item>
 
-          <Link to="/forgot-password" className="text-blue-600 float-right -mt-5">
-            Quên mật khẩu.
-          </Link>
-
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
             Đăng nhập
           </Button>
         </Form.Item>
       </Form>
+
+
+      <Link to="/forgot-password" className="text-blue-600">
+        Quên mật khẩu.
+      </Link>
     </div>
   );
 };

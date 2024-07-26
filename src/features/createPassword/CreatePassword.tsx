@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { FormProps } from "antd";
 import { Button, Form, Input, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,11 @@ const CreatePassword: React.FC = () => {
   const email = useSelector((state: RootState) => state.forgotPassword.email);
   const code = useSelector((state: RootState) => state.forgotPassword.code);
 
+  useEffect(() => {
+    if (!email || !code) {
+      navigate("/login");
+    }
+  });
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     if (values.confirm === values.password) {
       const playload = {

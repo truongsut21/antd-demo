@@ -15,6 +15,8 @@ import OtpPassword from "./features/otpPassword/OtpPassword";
 import CreatePassword from "./features/createPassword/CreatePassword";
 
 const App: React.FC = () => {
+  const TOKEN = localStorage.getItem("token");
+
   return (
     <Provider store={store}>
       <Router>
@@ -23,17 +25,19 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/otp-password" element={<OtpPassword />} />
           <Route path="/create-password" element={<CreatePassword />} />
-          <Route path="/dash-board" element={<DashBoard />} />
 
-          {/* Place new routes over this */}
-          {/* <Route path="/app/*" element={<Layout />} /> */}
 
-          {/* <Route
-            path="*"
+          <Route
+            path="/dash-board"
+            element={TOKEN ? <DashBoard /> : <Navigate to="/login" />}
+          />
+          
+          <Route
+            path="/"
             element={
-              <Navigate to={token ? "/app/welcome" : "/login"} replace />
+              TOKEN ? <Navigate to="/dash-board" /> : <Navigate to="/login" />
             }
-          /> */}
+          />
         </Routes>
       </Router>
     </Provider>

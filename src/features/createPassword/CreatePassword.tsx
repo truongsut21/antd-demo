@@ -50,7 +50,7 @@ const CreatePassword: React.FC = () => {
         console.log("error: ", error);
         notification.error({
           message: "Error",
-          description: "lôi ở CreatePassword",
+          description: "Error in api  CreatePassword",
         });
       }
     }

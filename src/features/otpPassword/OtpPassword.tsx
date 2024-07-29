@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Flex, Input, Typography, notification } from "antd";
 import type { GetProps } from "antd";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,7 @@ const OtpPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const email = useSelector((state: RootState) => state.forgotPassword.email);
+  const otpInputRef = useRef(null);
 
   useEffect(() => {
     if (!email) {
@@ -47,11 +48,24 @@ const OtpPassword: React.FC = () => {
           });
         }
       });
+
+      const inputsHTML =
+        document.querySelectorAll<HTMLInputElement>(".ant-otp-input");
+
+      inputsHTML.forEach((input) => {
+
+
+        console.log(input.value); // In giá trị của mỗi input ra console
+
+        input.value = ""
+      });
+
+
     } catch (error) {
       console.log("error: ", error);
       notification.error({
         message: "Error",
-        description: "lôi ở OtpPassword",
+        description: "Error in api  OtpPassword",
       });
     }
   };
@@ -64,7 +78,12 @@ const OtpPassword: React.FC = () => {
     <div className="flex">
       <Flex gap="middle" align="flex-start" vertical className="m-auto mt-10">
         <Title level={5}>OTP Password</Title>
-        <Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />
+        <Input.OTP
+          className="otp-input-value"
+          formatter={(str) => str.toUpperCase()}
+          {...sharedProps}
+          ref={otpInputRef}
+        />
       </Flex>
     </div>
   );

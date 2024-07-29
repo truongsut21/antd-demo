@@ -13,10 +13,12 @@ import ForgotPassword from "./features/fogotPassword/ForgotPassword";
 import DashBoard from "./features/dashBoard/DashBoard";
 import OtpPassword from "./features/otpPassword/OtpPassword";
 import CreatePassword from "./features/createPassword/CreatePassword";
+import Auth from "./app/auth";
 
 const App: React.FC = () => {
   const TOKEN = localStorage.getItem("access_token");
 
+  // Auth();
   return (
     <Provider store={store}>
       <Router>
@@ -26,12 +28,11 @@ const App: React.FC = () => {
           <Route path="/otp-password" element={<OtpPassword />} />
           <Route path="/create-password" element={<CreatePassword />} />
 
-
           <Route
             path="/dash-board"
             element={TOKEN ? <DashBoard /> : <Navigate to="/login" />}
           />
-          
+
           <Route
             path="/"
             element={

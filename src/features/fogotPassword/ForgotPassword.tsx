@@ -37,7 +37,7 @@ const ForgotPassword: React.FC = () => {
       console.log("error: ", error);
       notification.error({
         message: "Error",
-        description: "lôi ở ForgotPassword",
+        description: "Error in api  ForgotPassword",
       });
     }
   };

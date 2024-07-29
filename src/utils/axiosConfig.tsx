@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}`,
@@ -6,9 +6,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem("access_token");
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
@@ -22,11 +22,11 @@ let failedQueue: any[] = []; // Hàng đợi các yêu cầu bị thất bại t
 
 const processQueue = (error: any, token: string | null = null) => {
   // Xử lý hàng đợi các yêu cầu bị thất bại
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (token) {
-      prom.resolve(token); 
+      prom.resolve(token);
     } else {
-      prom.reject(error); 
+      prom.reject(error);
     }
   });
 
@@ -38,7 +38,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
 
-
   async (error) => {
     const originalRequest = error.config; // Lưu trữ yêu cầu ban đầu
 
@@ -46,39 +45,52 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         // Nếu đang làm mới token, thêm yêu cầu vào hàng đợi
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
-        }).then(token => {
-          // Cập nhật header Authorization với token mới khi token được làm mới
-          originalRequest.headers['Authorization'] = 'Bearer ' + token;
-          return axiosInstance(originalRequest); // Thử lại yêu cầu ban đầu
-        }).catch(err => {
-          return Promise.reject(err);
-        });
+        })
+          .then((token) => {
+            // Cập nhật header Authorization với token mới khi token được làm mới
+            originalRequest.headers["Authorization"] = "Bearer " + token;
+            return axiosInstance(originalRequest); // Thử lại yêu cầu ban đầu
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
       }
 
       originalRequest._retry = true; // Đánh dấu rằng yêu cầu này đang được thử lại
       isRefreshing = true; // Đánh dấu rằng hệ thống đang làm mới token
 
-      const refreshToken = localStorage.getItem('refresh_token'); // Lấy refresh token từ localStorage
+      const refreshToken = localStorage.getItem("refresh_token");
       return new Promise(function (resolve, reject) {
-        axios.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, { token: refreshToken })
+        axios
+          .post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {
+            refresh_token: refreshToken,
+          })
           .then(({ data }) => {
-            localStorage.setItem('access_token', data.access_token);
-            axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token;
-            originalRequest.headers['Authorization'] = 'Bearer ' + data.access_token;
-            processQueue(null, data.access_token); // Giải quyết các yêu cầu trong hàng đợi với token mới
+            localStorage.setItem("access_token", data.access_token);
+            axiosInstance.defaults.headers.common["Authorization"] =
+              "Bearer " + data.access_token;
+            originalRequest.headers["Authorization"] =
+              "Bearer " + data.access_token;
+            processQueue(null, data.access_token);
             resolve(axiosInstance(originalRequest)); // Thử lại yêu cầu ban đầu
           })
           .catch((err) => {
             processQueue(err, null); // Từ chối các yêu cầu trong hàng đợi nếu làm mới token thất bại
             reject(err);
+
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            window.location.href = "/login";
           })
-          .then(() => { isRefreshing = false });
+          .then(() => {
+            isRefreshing = false;
+          });
       });
     }
 
-    return Promise.reject(error); // Trả về lỗi nếu không thể làm mới token hoặc lỗi khác không phải 401
+    return Promise.reject(error);
   }
 );
 

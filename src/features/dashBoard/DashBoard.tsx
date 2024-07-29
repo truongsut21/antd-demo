@@ -1,19 +1,14 @@
-import React, { useState } from "react";
-import { Button, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, message, notification } from "antd";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosConfig";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { FetchProfile } from "../../api/FetchProfile";
 
 const DashBoard: React.FC = () => {
   const navigate = useNavigate();
-
-  const getDataUsetoken = async () => {
-    try {
-      // const response = await axiosInstance.get("/blabla");
-      console.log("response ");
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const [profileData, setProfileData] = useState<any>("");
 
   const handleLogout = () => {
     // Thực hiện hành động đăng xuất (xóa TOKEN, v.v.)
@@ -27,15 +22,45 @@ const DashBoard: React.FC = () => {
     navigate("/login");
   };
 
+  const fetchProfileData = async () => {
+    try {
+      const response = await dispatch(FetchProfile());
+      if (response.payload) {
+        setProfileData(response.payload); // Lưu trữ dữ liệu vào state
+        console.log("response: ", response);
+      } else {
+        notification.error({
+          message: "Error",
+          description: "Failed to fetch profile data",
+        });
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      notification.error({
+        message: "Error",
+        description: "Error in API FetchProfile",
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log("useEffect");
+    fetchProfileData();
+  }, []);
+
   return (
     <>
       <Button type="primary" onClick={handleLogout}>
         Đăng xuất
       </Button>
 
-      <Button type="primary" className="mx-5" onClick={getDataUsetoken}>
-        Chức năng cần token
+      <Button type="primary"className="mx-5" onClick={fetchProfileData}>
+      fetchProfileData
       </Button>
+
+      <p>{JSON.stringify(profileData)}</p>
+
+      
     </>
   );
 };

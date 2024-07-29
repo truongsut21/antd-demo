@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface LoginData {
   email: string;
@@ -10,24 +11,17 @@ export const FetchLogin = createAsyncThunk(
   async (data: LoginData, { rejectWithValue }) => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/api/auth/login`;
-      const response = await fetch(url, {
-        method: "POST",
+      const response = await axios.post(url, data, {
         headers: {
           accept: "*/*",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        // Lấy chi tiết lỗi từ response
-        const errorDetail = await response.json();
-        return rejectWithValue(errorDetail);
-      }
-
-      return await response.json();
-    } catch (error) {
-      return rejectWithValue(error);
+      return response.data;
+    } catch (error: any) {
+      // Nếu lỗi từ Axios, nó thường nằm trong `error.response`
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

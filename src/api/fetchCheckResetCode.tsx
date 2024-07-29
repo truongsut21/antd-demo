@@ -14,7 +14,7 @@ interface ForgotPasswordResponse {
 export const fetchCheckResetCode = createAsyncThunk<
   ForgotPasswordResponse,
   Payload
->("fetchCheckResetCode", async (data: Payload) => {
+>("fetchCheckResetCode", async (data: Payload, { rejectWithValue }) => {
   try {
     const url = `${process.env.REACT_APP_API_URL}/api/auth/check-reset-code`;
 
@@ -25,7 +25,7 @@ export const fetchCheckResetCode = createAsyncThunk<
       },
     });
     return response.data;
-  } catch (error) {
-    throw error; // Xử lý lỗi nếu có
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data || error.message);
   }
 });

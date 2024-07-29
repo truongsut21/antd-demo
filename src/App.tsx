@@ -15,7 +15,7 @@ import OtpPassword from "./features/otpPassword/OtpPassword";
 import CreatePassword from "./features/createPassword/CreatePassword";
 
 const App: React.FC = () => {
-  const TOKEN = localStorage.getItem("token");
+  const TOKEN = localStorage.getItem("access_token");
 
   return (
     <Provider store={store}>

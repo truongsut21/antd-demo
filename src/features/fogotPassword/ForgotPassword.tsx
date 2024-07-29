@@ -18,27 +18,27 @@ const ForgotPassword: React.FC = () => {
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       const requestAPI = dispatch(fetchForgotPassword(values));
-      const action = await requestAPI;
-
-      if (fetchForgotPassword.fulfilled.match(action)) {
-        const response = action.payload;
-        console.log("oke");
-
-        if (response.success) {
+      requestAPI.then((response: any) => {
+        if (response.payload.success) {
           dispatch(setEmail(values.email));
           navigate("/otp-password");
+          notification.success({
+            message: "Success",
+            description: response.payload.message,
+          });
         } else {
-          console.error("Failed:", response.message);
+          notification.error({
+            message: "Error",
+            description: response.payload.message,
+          });
         }
-      } else if (fetchForgotPassword.rejected.match(action)) {
-        notification.error({
-          message: "Error",
-          description: "Gửi mã thất bại",
-        });
-        console.error("Error:", action);
-      }
+      });
     } catch (error) {
-      console.error("Caught error:", error);
+      console.log("error: ", error);
+      notification.error({
+        message: "Error",
+        description: "lôi ở ForgotPassword",
+      });
     }
   };
 

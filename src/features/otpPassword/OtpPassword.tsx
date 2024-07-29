@@ -25,35 +25,34 @@ const OtpPassword: React.FC = () => {
   const onChange: OTPProps["onChange"] = async (code) => {
     console.log("onChange:", code);
 
+    const payload = {
+      email,
+      code,
+    };
+
     try {
-      const payload = {
-        email,
-        code,
-      };
-
-      const resultAction = await dispatch(fetchCheckResetCode(payload));
-
-      if (fetchCheckResetCode.fulfilled.match(resultAction)) {
-        notification.success({
-          message: "Success",
-          description: "OTP code is valid.",
-        });
-
-        dispatch(setCode(code));
-        navigate("/create-password");
-      } else if (fetchCheckResetCode.rejected.match(resultAction)) {
-        notification.error({
-          message: "Error",
-          description: "Invalid OTP code.",
-        });
-        console.error("Error:", resultAction.payload);
-      }
+      const requestAPI = dispatch(fetchCheckResetCode(payload));
+      requestAPI.then((response: any) => {
+        if (response.payload.success) {
+          dispatch(setCode(code));
+          navigate("/create-password");
+          notification.success({
+            message: "Success",
+            description: response.payload.message,
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: response.payload.message,
+          });
+        }
+      });
     } catch (error) {
+      console.log("error: ", error);
       notification.error({
         message: "Error",
-        description: "An unexpected error occurred.",
+        description: "lôi ở OtpPassword",
       });
-      console.error("Caught error:", error);
     }
   };
 

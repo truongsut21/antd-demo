@@ -29,22 +29,29 @@ const CreatePassword: React.FC = () => {
         code,
         password: values.password,
       };
+
       try {
-        const resultAction = await dispatch(fetchResetPassword(playload));
-        if (fetchResetPassword.fulfilled.match(resultAction)) {
-          console.log("Password reset successful", resultAction.payload);
-
-          notification.success({
-            message: "Success",
-            description: "Create password success",
-          });
-
-          navigate("/login");
-        } else {
-          console.error("Password reset failed", resultAction.error.message);
-        }
+        const requestAPI = dispatch(fetchResetPassword(playload));
+        requestAPI.then((response: any) => {
+          if (response.payload.success) {
+            navigate("/login");
+            notification.success({
+              message: "Success",
+              description: response.payload.message,
+            });
+          } else {
+            notification.error({
+              message: "Error",
+              description: response.payload.message,
+            });
+          }
+        });
       } catch (error) {
-        console.error("An unexpected error occurred", error);
+        console.log("error: ", error);
+        notification.error({
+          message: "Error",
+          description: "lôi ở CreatePassword",
+        });
       }
     }
   };

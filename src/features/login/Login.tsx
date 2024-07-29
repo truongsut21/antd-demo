@@ -22,7 +22,9 @@ const Login: React.FC = () => {
     try {
       requestAPI.then((response) => {
         if (response.payload.access_token) {
-          localStorage.setItem("token", response.payload.access_token);
+          localStorage.setItem("access_token", response.payload.access_token);
+          localStorage.setItem("refresh_token", response.payload.refresh_token);
+
           // set token mặc định
           axios.defaults.headers.common[
             "Authorization"

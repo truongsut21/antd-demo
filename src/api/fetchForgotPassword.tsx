@@ -13,9 +13,9 @@ interface ForgotPasswordResponse {
 export const fetchForgotPassword = createAsyncThunk<
   ForgotPasswordResponse,
   Payload
->("fetchForgotPassWord", async (data: Payload) => {
+>("fetchForgotPassWord", async (data: Payload, { rejectWithValue }) => {
   try {
-    const tokenJWT = localStorage.getItem("token");
+    const tokenJWT = localStorage.getItem("access_token");
     const url = `${process.env.REACT_APP_API_URL}/api/auth/forgot-password`;
 
     const response = await axios.post(url, data, {
@@ -26,7 +26,8 @@ export const fetchForgotPassword = createAsyncThunk<
       },
     });
     return response.data;
-  } catch (error) {
-    throw error; // Xử lý lỗi nếu có
+  } catch (error: any) {
+    // Nếu lỗi từ Axios, nó thường nằm trong `error.response`
+    return rejectWithValue(error.response?.data || error.message);
   }
 });

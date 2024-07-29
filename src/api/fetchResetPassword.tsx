@@ -4,12 +4,12 @@ import axios from "axios";
 interface payload {
   email: string;
   password: string;
-  code: string
+  code: string;
 }
 
 export const fetchResetPassword = createAsyncThunk(
   "fetchResetPassword",
-  async (data: payload) => {
+  async (data: payload, { rejectWithValue }) => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/api/auth/reset-password`;
 
@@ -20,8 +20,8 @@ export const fetchResetPassword = createAsyncThunk(
         },
       });
       return response.data;
-    } catch (error) {
-      throw error; // Xử lý lỗi nếu có
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

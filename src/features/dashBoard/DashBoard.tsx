@@ -11,14 +11,9 @@ const DashBoard: React.FC = () => {
   const [profileData, setProfileData] = useState<any>("");
 
   const handleLogout = () => {
-    // Thực hiện hành động đăng xuất (xóa TOKEN, v.v.)
-    localStorage.removeItem("access_token"); // Xóa TOKEN khỏi localStorage
-    localStorage.removeItem("refresh_token"); // Xóa refresh_token khỏi localStorage
-
-    // Hiển thị thông báo
+    localStorage.removeItem("access_token"); 
+    localStorage.removeItem("refresh_token"); 
     message.success("Successfully logged out");
-
-    // Điều hướng người dùng đến trang đăng nhập
     navigate("/login");
   };
 
@@ -27,11 +22,9 @@ const DashBoard: React.FC = () => {
       const response = await dispatch(FetchProfile());
       if (response.payload) {
         setProfileData(response.payload); // Lưu trữ dữ liệu vào state
-        console.log("response: ", response);
-      } else {
-        notification.error({
-          message: "Error",
-          description: "Failed to fetch profile data",
+        notification.success({
+          message: "success",
+          description: "Fetch profile data",
         });
       }
     } catch (error) {
@@ -44,24 +37,23 @@ const DashBoard: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect");
     fetchProfileData();
   }, []);
 
   return (
-    <>
+    <div className="m-10">
       <Button type="primary" onClick={handleLogout}>
         Đăng xuất
       </Button>
 
-      <Button type="primary"className="mx-5" onClick={fetchProfileData}>
-      fetchProfileData
+      <Button type="primary" className="mx-5" onClick={fetchProfileData}>
+        Fetch ProfileData
       </Button>
 
-      <p>{JSON.stringify(profileData)}</p>
-
-      
-    </>
+      <p className="mt-10">ID: {profileData.id}</p> <br />
+      <p>Email: {profileData.email}</p> <br />
+      <p>Username: {profileData.username}</p> <br />
+    </div>
   );
 };
 

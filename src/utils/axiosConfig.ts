@@ -27,7 +27,8 @@ const processQueue = (error: any, token: string | null = null) => {
     if (token) {
       prom.resolve(token); // Giải quyết các yêu cầu với token mới
     } else {
-      prom.reject(error); // Từ chối các yêu cầu nếu không thể làm mới token
+      prom.reject(error); 
+      // Từ chối các yêu cầu nếu không thể làm mới token
     }
   });
 
@@ -40,7 +41,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
 
-  
+
   async (error) => {
     const originalRequest = error.config; // Lưu trữ yêu cầu ban đầu
 

@@ -34,7 +34,7 @@ const DashBoard: React.FC = () => {
       </Button>
 
       <Button type="primary" className="mx-5" onClick={getDataUsetoken}>
-        Chuc nang can token
+        Chức năng cần token
       </Button>
     </>
   );

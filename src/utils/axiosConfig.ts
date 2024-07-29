@@ -17,7 +17,6 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Biến để tránh các yêu cầu refresh token song song
 let isRefreshing = false; // Đánh dấu trạng thái làm mới token
 let failedQueue: any[] = []; // Hàng đợi các yêu cầu bị thất bại trong khi làm mới token
 
@@ -25,17 +24,15 @@ const processQueue = (error: any, token: string | null = null) => {
   // Xử lý hàng đợi các yêu cầu bị thất bại
   failedQueue.forEach(prom => {
     if (token) {
-      prom.resolve(token); // Giải quyết các yêu cầu với token mới
+      prom.resolve(token); 
     } else {
       prom.reject(error); 
-      // Từ chối các yêu cầu nếu không thể làm mới token
     }
   });
 
-  failedQueue = []; // Làm trống hàng đợi sau khi xử lý xong
+  failedQueue = [];
 };
 
-// Thêm interceptor cho các phản hồi
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;

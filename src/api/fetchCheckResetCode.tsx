@@ -5,7 +5,6 @@ interface Payload {
   email: string;
   code: string;
 }
-// Định nghĩa interface cho response
 interface ForgotPasswordResponse {
   success: boolean;
   message: string;

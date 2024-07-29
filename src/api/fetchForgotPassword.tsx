@@ -4,7 +4,6 @@ import axios from "axios";
 interface Payload {
   email: string;
 }
-// Định nghĩa interface cho response
 interface ForgotPasswordResponse {
   success: boolean;
   message: string;
@@ -27,7 +26,6 @@ export const fetchForgotPassword = createAsyncThunk<
     });
     return response.data;
   } catch (error: any) {
-    // Nếu lỗi từ Axios, nó thường nằm trong `error.response`
     return rejectWithValue(error.response?.data || error.message);
   }
 });

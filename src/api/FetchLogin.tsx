@@ -20,7 +20,6 @@ export const FetchLogin = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      // Nếu lỗi từ Axios, nó thường nằm trong `error.response`
       return rejectWithValue(error.response?.data || error.message);
     }
   }
